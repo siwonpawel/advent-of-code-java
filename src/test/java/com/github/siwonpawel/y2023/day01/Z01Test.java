@@ -26,6 +26,19 @@ class Z01Test
         assertThat(result).isEqualTo(142);
     }
 
+    @Test
+    void shouldCalculateCorrectCoordinatesForInput()
+    {
+        // given
+        List<String> read = read("input.txt");
+
+        // when
+        int result = z01.count(read);
+
+        // then
+        assertThat(result).isEqualTo(55_108);
+    }
+
     private List<String> read(String filename)
     {
         try (var in = getClass().getResourceAsStream(filename))
