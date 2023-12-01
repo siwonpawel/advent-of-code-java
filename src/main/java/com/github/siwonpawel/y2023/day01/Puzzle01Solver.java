@@ -4,9 +4,10 @@ import java.util.List;
 
 import static java.util.function.Predicate.not;
 
-public class Puzzle01Solver
+public class Puzzle01Solver implements Solver
 {
 
+    @Override
     public int count(List<String> input) {
         return input.stream()
                 .filter(not(String::isBlank))

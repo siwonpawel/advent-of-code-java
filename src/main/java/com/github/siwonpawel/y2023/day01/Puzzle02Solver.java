@@ -4,13 +4,14 @@ import java.util.List;
 
 import static java.util.function.Predicate.not;
 
-public class Puzzle02Solver
+public class Puzzle02Solver implements Solver
 {
 
     private static final String[] LETTER_DIGITS = new String[] {
             "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"
     };
 
+    @Override
     public int count(List<String> input)
     {
         return input.stream()

@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.*;
 class Puzzle02SolverTest
 {
 
-    private Puzzle02Solver solver = new Puzzle02Solver();
+    private Solver solver = new Puzzle02Solver();
 
     @Test
     void shouldCalculateCorrectCoordinatesForTestInput()
@@ -24,6 +24,19 @@ class Puzzle02SolverTest
 
         // then
         assertThat(result).isEqualTo(281);
+    }
+
+    @Test
+    void shouldCalculateCorrectCoordinatesForInput()
+    {
+        // given
+        List<String> read = read("input.txt");
+
+        // when
+        int result = solver.count(read);
+
+        // then
+        assertThat(result).isEqualTo(56_324);
     }
 
     private List<String> read(String filename)

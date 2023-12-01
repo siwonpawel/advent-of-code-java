@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.*;
 class Puzzle01SolverTest
 {
 
-    private Puzzle01Solver solver = new Puzzle01Solver();
+    private Solver solver = new Puzzle01Solver();
 
     @Test
     void shouldCalculateCorrectCoordinatesForTestInput()
