@@ -4,17 +4,20 @@ import java.nio.charset.Charset;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 
-class Puzzle01SolverTest
+class CoordinateSolverTest
 {
 
-    private Solver solver = new Puzzle01Solver();
+    private CoordinateSolver solver = new CoordinateSolver();
+
 
     @Test
-    void shouldCalculateCorrectCoordinatesForTestInput()
+    @Disabled("moving to part 2")
+    void shouldCalculateCorrectCoordinatesForTestInputOfPart1()
     {
         // given
         List<String> read = read("test_input_1.txt");
@@ -27,7 +30,8 @@ class Puzzle01SolverTest
     }
 
     @Test
-    void shouldCalculateCorrectCoordinatesForInput()
+    @Disabled("moving to part 2")
+    void shouldCalculateCorrectCoordinatesForInputOfPart1()
     {
         // given
         List<String> read = read("input.txt");
@@ -37,6 +41,32 @@ class Puzzle01SolverTest
 
         // then
         assertThat(result).isEqualTo(55_108);
+    }
+
+    @Test
+    void shouldCalculateCorrectCoordinatesForTestInputOfPart2()
+    {
+        // given
+        List<String> read = read("test_input_2.txt");
+
+        // when
+        int result = solver.count(read);
+
+        // then
+        assertThat(result).isEqualTo(281);
+    }
+
+    @Test
+    void shouldCalculateCorrectCoordinatesForInputOfPart2()
+    {
+        // given
+        List<String> read = read("input.txt");
+
+        // when
+        int result = solver.count(read);
+
+        // then
+        assertThat(result).isEqualTo(56_324);
     }
 
     private List<String> read(String filename)
