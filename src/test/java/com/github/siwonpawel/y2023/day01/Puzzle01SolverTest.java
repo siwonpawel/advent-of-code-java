@@ -8,10 +8,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 
-class Z01Test
+class Puzzle01SolverTest
 {
 
-    private Z01 z01 = new Z01();
+    private Puzzle01Solver solver = new Puzzle01Solver();
 
     @Test
     void shouldCalculateCorrectCoordinatesForTestInput()
@@ -20,7 +20,7 @@ class Z01Test
         List<String> read = read("test_input_1.txt");
 
         // when
-        int result = z01.count(read);
+        int result = solver.count(read);
 
         // then
         assertThat(result).isEqualTo(142);
@@ -33,7 +33,7 @@ class Z01Test
         List<String> read = read("input.txt");
 
         // when
-        int result = z01.count(read);
+        int result = solver.count(read);
 
         // then
         assertThat(result).isEqualTo(55_108);

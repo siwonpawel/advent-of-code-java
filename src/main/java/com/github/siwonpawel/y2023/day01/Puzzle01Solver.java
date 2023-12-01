@@ -4,7 +4,7 @@ import java.util.List;
 
 import static java.util.function.Predicate.not;
 
-public class Z01
+public class Puzzle01Solver
 {
 
     public int count(List<String> input) {
