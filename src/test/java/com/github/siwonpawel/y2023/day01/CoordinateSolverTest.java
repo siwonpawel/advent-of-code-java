@@ -7,9 +7,11 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import com.github.siwonpawel.y2023.FileReader;
+
 import static org.assertj.core.api.Assertions.*;
 
-class CoordinateSolverTest
+class CoordinateSolverTest extends FileReader
 {
 
     private CoordinateSolver solver = new CoordinateSolver();
@@ -69,15 +71,4 @@ class CoordinateSolverTest
         assertThat(result).isEqualTo(56_324);
     }
 
-    private List<String> read(String filename)
-    {
-        try (var in = getClass().getResourceAsStream(filename))
-        {
-            return IOUtils.readLines(in, Charset.defaultCharset());
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
 }
