@@ -2,57 +2,43 @@ package com.github.siwonpawel.y2023.day02;
 
 import java.util.AbstractMap;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class CubeConundrumSolver
 {
 
-    private static final String RED = "red";
-    private static final String GREEN = "green";
-    private static final String BLUE = "blue";
-
-    private static final Map<String, Integer> MAX_NUMBERS = Map.of(
-            RED, 12,
-            GREEN, 13,
-            BLUE, 14
-    );
-
     public int doFinal(List<String> input)
     {
         return input.stream()
-                .filter(this::isGameCorrect)
-                .mapToInt(this::getGameId)
+                .mapToInt(this::powerBalls)
                 .sum();
     }
 
-    private boolean isGameCorrect(String s)
+    private int powerBalls(String s)
     {
-        return Arrays.stream(s.split(":")[1].split(";"))
-                .noneMatch(this::isSetIncorrect);
-    }
-
-    private boolean isSetIncorrect(String s)
-    {
-        var collect = Arrays.stream(s.split(","))
+        var collect = Arrays.stream(s.split("[,;]"))
                 .map(String::trim)
                 .map(this::split)
                 .flatMap(Optional::stream)
-                .toList();
+                .reduce(
+                        new HashMap<String, Integer>(),
+                        (map, entry) -> {
+                            map.merge(entry.getKey(), entry.getValue(), Math::max);
+                            return map;
+                        },
+                        (m1, m2) -> {
+                            throw new UnsupportedOperationException("Combining not supported");
+                        }
+                );
 
-        for(var e : collect) {
-            var maxValue = MAX_NUMBERS.get(e.getKey());
-
-            if(maxValue < e.getValue()) {
-                return true;
-            }
-        }
-
-        return false;
+        return collect.values().stream()
+                .mapToInt(i -> i)
+                .reduce(1, (a, b) -> a * b);
     }
 
     private Optional<Map.Entry<String, Integer>> split(String s)
@@ -61,7 +47,8 @@ public class CubeConundrumSolver
         Pattern compile = Pattern.compile("(\\d+) ([A-z]+)");
 
         Matcher matcher = compile.matcher(s);
-        if(matcher.find()) {
+        if (matcher.find())
+        {
             String group = matcher.group(1);
             String group1 = matcher.group(2);
 
@@ -69,19 +56,5 @@ public class CubeConundrumSolver
         }
 
         return Optional.empty();
-    }
-
-    private int getGameId(String s)
-    {
-        Pattern compile = Pattern.compile("Game (\\d+).+");
-        Matcher matcher = compile.matcher(s);
-        if(matcher.find())
-        {
-            String group = matcher.group(1);
-
-            return Integer.valueOf(group);
-        }
-
-        return 0;
     }
 }
