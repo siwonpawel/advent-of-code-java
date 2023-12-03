@@ -5,7 +5,7 @@ import java.util.List;
 public class GearRatiosSolver
 {
 
-    private static final char DOT = '.';
+    private static final char GEAR = '*';
 
     public int doFinal(List<String> input)
     {
@@ -14,72 +14,148 @@ public class GearRatiosSolver
         int sum = 0;
         for (int i = 0; i < parsedLines.length; i++)
         {
-            int lineLength = parsedLines[i].length;
-            for (int j = 0; j < lineLength; j++)
+            for (int j = 0; j < parsedLines[i].length; j++)
             {
-                if (Character.isDigit(parsedLines[i][j]))
-                {
-                    int number = 0;
-
-                    int start = j;
-                    int end = j;
-                    while (j < lineLength && Character.isDigit(parsedLines[i][j]))
-                    {
-                        number = number * 10 + Character.getNumericValue(parsedLines[i][j]);
-
-                        end = j;
-                        j++;
-                    }
-
-                    if (shouldBeSummed(parsedLines, i, start, end))
-                    {
-                        sum += number;
-                    }
-                }
+                sum += getGearRatio(parsedLines, i, j);
             }
         }
 
         return sum;
     }
 
-    private boolean shouldBeSummed(char[][] parsedLines, int row, int leftBoundary, int rightBoundary)
+    private static int getGearRatio(char[][] parsedLines, int row, int col)
     {
-
-        if (leftBoundary > 0)
+        if (GEAR != parsedLines[row][col])
         {
-            leftBoundary--;
+            return 0;
         }
 
-        if (rightBoundary < parsedLines[row].length - 1)
+        if (!hasTwoPartNumbers(parsedLines, row, col))
         {
-            rightBoundary++;
+            return 0;
         }
 
-        int upperBoundary = row;
-        if (upperBoundary > 0)
+        return computeGearRatio(parsedLines, row, col);
+    }
+
+    private static int computeGearRatio(char[][] parsedLines, int row, int col)
+    {
+        int upperBound = row;
+        if (upperBound > 0)
         {
-            upperBoundary--;
+            upperBound--;
         }
 
-        int lowerBoundary = row;
-        if (lowerBoundary < parsedLines.length - 1)
+        int lowerBound = row;
+        if (lowerBound < parsedLines.length - 1)
         {
-            lowerBoundary++;
+            lowerBound++;
         }
 
-        for (int i = upperBoundary; i <= lowerBoundary; i++)
+        int leftBound = col;
+        if (leftBound > 0)
         {
-            for (int j = leftBoundary; j <= rightBoundary; j++)
+            leftBound--;
+        }
+
+        int rightBound = col;
+        if (rightBound < parsedLines[row].length - 1)
+        {
+            rightBound++;
+        }
+
+        int multi = 1;
+        for (int i = upperBound; i <= lowerBound; i++)
+        {
+            for (int j = leftBound; j <= rightBound; j++)
             {
-                char c = parsedLines[i][j];
-                if (c != DOT && !Character.isDigit(c))
+                if (Character.isDigit(parsedLines[i][j]))
                 {
-                    return true;
+
+                    int start = j;
+                    while (start > 0)
+                    {
+                        if (Character.isDigit(parsedLines[i][start - 1]))
+                        {
+                            start--;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    while (j < parsedLines[i].length)
+                    {
+                        if (!Character.isDigit(parsedLines[i][j]))
+                        {
+                            break;
+                        }
+
+                        j++;
+                    }
+
+                    int tmp = 0;
+                    for (; start < j; start++)
+                    {
+                        tmp = tmp * 10 + Character.getNumericValue(parsedLines[i][start]);
+                    }
+
+                    multi *= tmp;
+                }
+            }
+
+        }
+
+        return multi;
+    }
+
+    private static boolean hasTwoPartNumbers(char[][] parsedLines, int row, int col)
+    {
+        int upperBound = row;
+        if (upperBound > 0)
+        {
+            upperBound--;
+        }
+
+        int lowerBound = row;
+        if (lowerBound < parsedLines.length - 1)
+        {
+            lowerBound++;
+        }
+
+        int leftBound = col;
+        if (leftBound > 0)
+        {
+            leftBound--;
+        }
+
+        int rightBound = col;
+        if (rightBound < parsedLines[row].length - 1)
+        {
+            rightBound++;
+        }
+
+        int numbersCount = 0;
+        for (int i = upperBound; i <= lowerBound; i++)
+        {
+            boolean changed = false;
+            for (int j = leftBound; j <= rightBound; j++)
+            {
+                boolean isDigit = Character.isDigit(parsedLines[i][j]);
+                if (isDigit && !changed)
+                {
+                    numbersCount++;
+                    changed = !changed;
+                }
+                else if (!isDigit && changed)
+                {
+                    changed = !changed;
                 }
             }
         }
 
-        return false;
+        return numbersCount == 2;
     }
 
     private char[][] parse(List<String> value)
