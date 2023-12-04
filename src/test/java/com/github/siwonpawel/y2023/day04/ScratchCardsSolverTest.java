@@ -39,4 +39,30 @@ class ScratchCardsSolverTest extends FileReader
         assertThat(result).isEqualTo(25004);
     }
 
+    @Test
+    void shouldCorrectlySolveExampleInputForPart2()
+    {
+        // given
+        List<String> input = read("test_input.txt");
+
+        // when
+        int result = solver.solvePart2(input);
+
+        // then
+        assertThat(result).isEqualTo(30);
+    }
+
+    @Test
+    void shouldCorrectlySolveInputForPart2()
+    {
+        // given
+        List<String> input = read("input.txt");
+
+        // when
+        int result = solver.solvePart2(input);
+
+        // then
+        assertThat(result).isEqualTo(14427616);
+    }
+
 }

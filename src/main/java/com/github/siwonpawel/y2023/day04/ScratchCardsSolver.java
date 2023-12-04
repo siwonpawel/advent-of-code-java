@@ -1,8 +1,10 @@
 package com.github.siwonpawel.y2023.day04;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.github.siwonpawel.Day;
@@ -24,7 +26,27 @@ public class ScratchCardsSolver extends Day
     @Override
     public int solvePart2(List<String> input)
     {
-        return 0;
+        List<Card> cards = input.stream()
+                .map(Card::new)
+                .toList();
+
+        Map<Integer, Integer> copiesOfCards = new HashMap<>();
+
+        for (var c : cards)
+        {
+            int i = cards.indexOf(c);
+            Integer numberOfCopies = copiesOfCards.getOrDefault(i, 0) + 1;
+            int points = c.matches();
+
+            while (points > 0)
+            {
+                copiesOfCards.merge(i + points, numberOfCopies, Integer::sum);
+                points--;
+            }
+            copiesOfCards.merge(i, 1, Integer::sum);
+        }
+
+        return copiesOfCards.values().stream().mapToInt(i -> i).sum();
     }
 }
 
@@ -58,13 +80,18 @@ class Card
         this.numbers = new LinkedHashSet<>(randomNumbers);
     }
 
-    public int points()
+    public int matches()
     {
-        long matches = numbers.stream()
+        return (int) numbers.stream()
                 .filter(winning::contains)
                 .count();
+    }
 
-        return matches <= 2 ? (int) matches : (int) Math.pow(2, matches - 1D);
+    public int points()
+    {
+        int matches = matches();
+
+        return matches <= 2 ? matches : (int) Math.pow(2, matches - 1D);
     }
 
 }
